@@ -3,112 +3,597 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>iFrame Demo</title>
+  <title>Bluebell Ecstatic Dance with Anna-Lisa & Simona</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+      background: #f7f7f5;
+      color: #1a1a1a;
+      font-size: 15px;
+      line-height: 1.6;
     }
 
-    .controls {
-      display: flex;
-      gap: 8px;
-      padding: 12px 16px;
+    /* ── NAV ── */
+    nav {
       background: #fff;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 24px;
+      display: flex;
       align-items: center;
+      height: 56px;
+      gap: 24px;
     }
-
-    .controls label {
+    .nav-logo {
+      font-weight: 700;
+      font-size: 18px;
+      color: #1a1a1a;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-logo span { color: #e05a2b; }
+    .nav-links { display: flex; gap: 16px; margin-left: auto; }
+    .nav-links a {
       font-size: 14px;
       color: #555;
-      white-space: nowrap;
+      text-decoration: none;
     }
-
-    .controls input {
-      flex: 1;
-      padding: 8px 12px;
-      font-size: 14px;
-      border: 1px solid #ccc;
+    .nav-links a:hover { color: #1a1a1a; }
+    .nav-btn {
+      padding: 6px 14px;
       border-radius: 6px;
-      outline: none;
-    }
-
-    .controls input:focus {
-      border-color: #4f46e5;
-      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
-    }
-
-    .controls button {
-      padding: 8px 16px;
       font-size: 14px;
-      background: #4f46e5;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      background: #fff;
+      color: #1a1a1a;
+    }
+    .nav-btn.primary {
+      background: #1a1a1a;
+      color: #fff;
+      border-color: #1a1a1a;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #6b9e6b 0%, #4a7c59 40%, #8fbf7f 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-img-placeholder {
+      width: 100%;
+      height: 320px;
+      background: linear-gradient(160deg, #7bb58a 0%, #4e8b5f 50%, #a8d5a2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .hero-img-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, rgba(138,195,120,0.6) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 30%, rgba(80,140,100,0.5) 0%, transparent 50%);
+    }
+    .hero-flowers {
+      font-size: 72px;
+      opacity: 0.35;
+      letter-spacing: 8px;
+    }
+
+    /* ── LAYOUT ── */
+    .page-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px 64px;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── LEFT COLUMN ── */
+    .event-title {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      grid-column: 1 / -1;
+    }
+
+    .meta-table {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .meta-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .meta-row:last-child { border-bottom: none; }
+    .meta-icon {
+      font-size: 16px;
+      width: 20px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+    .meta-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 2px;
+    }
+    .meta-value { font-size: 14px; color: #1a1a1a; }
+    .meta-value a { color: #2d6a4f; text-decoration: none; }
+    .meta-value a:hover { text-decoration: underline; }
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      background: #f0f7f0;
+      color: #2d6a4f;
+      border-radius: 20px;
+      font-size: 12px;
+      margin: 2px 3px 2px 0;
+    }
+
+    .host-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+    }
+    .host-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6baf7a, #2d6a4f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .host-name { font-weight: 600; font-size: 14px; }
+    .host-sub { font-size: 12px; color: #888; }
+
+    .attendance {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .attendance-dot {
+      width: 8px; height: 8px;
+      background: #2d6a4f;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #888;
+      margin: 24px 0 8px;
+    }
+    .event-desc { font-size: 14px; color: #333; margin-bottom: 8px; }
+    .event-desc p { margin-bottom: 10px; }
+
+    /* ── RIGHT COLUMN: PAYMENT FORM ── */
+    .sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+    .ticket-box {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .ticket-box-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .ticket-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f7f7f7;
+      gap: 8px;
+    }
+    .ticket-row:last-child { border-bottom: none; }
+    .ticket-name { font-size: 14px; font-weight: 500; }
+    .ticket-avail { font-size: 12px; color: #888; margin-top: 2px; }
+    .ticket-price { font-size: 14px; font-weight: 600; color: #1a1a1a; white-space: nowrap; }
+    .ticket-qty {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qty-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      background: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+    }
+    .qty-btn:hover { background: #f5f5f5; }
+    .qty-val { font-size: 14px; font-weight: 500; min-width: 16px; text-align: center; }
+
+    .checkout-form {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 12px; font-weight: 600; color: #555; }
+    .form-group input,
+    .form-group select {
+      padding: 9px 11px;
+      border: 1px solid #d0d0d0;
+      border-radius: 7px;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #2d6a4f;
+      box-shadow: 0 0 0 2px rgba(45,106,79,0.12);
+    }
+
+    .donation-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 4px;
+    }
+    .donation-options {
+      display: flex;
+      gap: 8px;
+    }
+    .donation-option {
+      flex: 1;
+      padding: 7px 4px;
+      border: 1px solid #d0d0d0;
+      border-radius: 7px;
+      font-size: 13px;
+      text-align: center;
+      cursor: pointer;
+      background: #fff;
+    }
+    .donation-option.selected {
+      border-color: #2d6a4f;
+      background: #f0f7f0;
+      color: #2d6a4f;
+      font-weight: 600;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: #555;
+    }
+    .checkbox-row input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; }
+
+    .rsvp-btn {
+      width: 100%;
+      padding: 12px;
+      background: #2d6a4f;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
+      letter-spacing: 0.02em;
     }
+    .rsvp-btn:hover { background: #245c43; }
 
-    .controls button:hover {
-      background: #4338ca;
+    /* ── IFRAME WIDGET ── */
+    .widget-section {
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      overflow: hidden;
     }
-
-    #frame-container {
-      flex: 1;
+    .widget-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 24px;
+      align-items: center;
+      gap: 8px;
     }
-
-    #frame-container iframe {
-      width: 450px;
+    .widget-header .circles-logo {
+      width: 20px; height: 20px;
+      background: #1a1a1a;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #fff;
+      font-weight: 700;
+    }
+    .widget-section iframe {
+      width: 100%;
       height: 600px;
       border: none;
+      display: block;
+    }
+
+    @media (max-width: 680px) {
+      .page-content {
+        grid-template-columns: 1fr;
+      }
+      .event-title { grid-column: 1; }
     }
   </style>
 </head>
 <body>
-  <div class="controls">
-    <label for="url-input">URL</label>
-    <input
-      id="url-input"
-      type="text"
-      value="https://circles.gnosis.io/pilots/kudos-ga?group=dandelion&address=0xf48554937f18885c7f15c432c596b5843648231D"
-      placeholder="https://..."
-    />
-    <button onclick="loadFrame()">Load</button>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">🌼 <span>dandelion</span>.events</a>
+    <div class="nav-links">
+      <a href="#">Events</a>
+      <a href="#">Organisations</a>
+      <a href="#">Facilitators</a>
+      <button class="nav-btn">Log in</button>
+      <button class="nav-btn primary">Sign up</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero-img-placeholder">
+    <div class="hero-flowers">🌸🌿🌺🌿🌸</div>
   </div>
-  <div id="frame-container">
-    <iframe id="demo-frame" src="" allowfullscreen></iframe>
-  </div>
+
+  <!-- PAGE CONTENT -->
+  <div class="page-content">
+
+    <h1 class="event-title">Bluebell Ecstatic Dance with Anna-Lisa &amp; Simona</h1>
+
+    <!-- LEFT -->
+    <div>
+      <div class="meta-table">
+        <div class="meta-row">
+          <div class="meta-icon">📅</div>
+          <div>
+            <div class="meta-label">Date &amp; Time</div>
+            <div class="meta-value">Sun 26th Apr 2026 · 11am – 2pm BST (UTC +01:00)</div>
+          </div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-icon">📍</div>
+          <div>
+            <div class="meta-label">Location</div>
+            <div class="meta-value">
+              Stanmer Park Nature Reserve, Falmer, Brighton<br>
+              <a href="#">View on Google Maps →</a>
+            </div>
+          </div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-icon">🏷️</div>
+          <div>
+            <div class="meta-label">Tags</div>
+            <div class="meta-value">
+              <span class="tag">dance movement</span>
+              <span class="tag">nature connection</span>
+              <span class="tag">ecstatic dance</span>
+            </div>
+          </div>
+        </div>
+        <div class="meta-row">
+          <div class="meta-icon">🔗</div>
+          <div>
+            <div class="meta-label">Event URL</div>
+            <div class="meta-value"><a href="#">dandelion.events/e/c9urf</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="host-card">
+        <div class="host-avatar">🌿</div>
+        <div>
+          <div class="host-name">Ecstatic Dance Brighton</div>
+          <div class="host-sub">Organiser</div>
+        </div>
+      </div>
+
+      <div class="attendance">
+        <span class="attendance-dot"></span>
+        46 people registered
+      </div>
+
+      <div class="section-title">About</div>
+      <div class="event-desc">
+        <p>Welcome to our Bluebell Ecstatic Dance — a magical outdoor gathering in the heart of Stanmer Park Nature Reserve. Dance freely among the bluebells as Anna-Lisa and Simona guide you through a flowing musical journey.</p>
+        <p><strong>FLOW</strong><br>
+        10:30am — Arrival &amp; grounding<br>
+        11:00am — Opening circle<br>
+        11:15am – 1:30pm — Free dance<br>
+        1:30pm – 2:00pm — Closing, integration</p>
+        <p><strong>The Practical Things</strong><br>
+        Wear layers — the weather in the park can be unpredictable. Bring water and a snack. We use silent disco headsets so the dance doesn't disturb other park visitors.</p>
+        <p>More info at <a href="#">www.ecstaticdancebrighton.co.uk</a></p>
+      </div>
+    </div>
+
+    <!-- RIGHT: SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- Ticket selection -->
+      <div class="ticket-box">
+        <div class="ticket-box-header">Select tickets</div>
+        <div class="ticket-row">
+          <div>
+            <div class="ticket-name">Concession</div>
+            <div class="ticket-avail">2 remaining</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="ticket-price">£13</div>
+            <div class="ticket-qty">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-val">0</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-row">
+          <div>
+            <div class="ticket-name">Standard</div>
+            <div class="ticket-avail">5 available</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="ticket-price">£16</div>
+            <div class="ticket-qty">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-val">0</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-row">
+          <div>
+            <div class="ticket-name">Pay It Forward</div>
+            <div class="ticket-avail">8 available</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="ticket-price">£19</div>
+            <div class="ticket-qty">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-val">0</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="ticket-row">
+          <div>
+            <div class="ticket-name">Children (14 and under)</div>
+            <div class="ticket-avail">4 available</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="ticket-price">Free</div>
+            <div class="ticket-qty">
+              <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+              <span class="qty-val">0</span>
+              <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout form -->
+      <div class="checkout-form">
+        <div class="form-group">
+          <label>Full name *</label>
+          <input type="text" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>Phone number</label>
+          <input type="tel" placeholder="+44...">
+        </div>
+        <div class="form-group">
+          <label>How did you hear about this event?</label>
+          <select>
+            <option value="">Select an option…</option>
+            <option>Friend / word of mouth</option>
+            <option>Social media</option>
+            <option>Newsletter</option>
+            <option>Search engine</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div>
+          <div class="donation-label">Add a platform donation</div>
+          <div class="donation-options">
+            <div class="donation-option" onclick="selectDonation(this)">1%</div>
+            <div class="donation-option selected" onclick="selectDonation(this)">5%</div>
+            <div class="donation-option" onclick="selectDonation(this)">10%</div>
+          </div>
+        </div>
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="email-updates">
+          <label for="email-updates">Send me updates about this and similar events</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="terms">
+          <label for="terms">I agree to the <a href="#" style="color:#2d6a4f">terms and conditions</a></label>
+        </div>
+
+        <button class="rsvp-btn">RSVP &amp; Pay</button>
+      </div>
+
+      <!-- Circles iframe widget -->
+      <div class="widget-section">
+        <div class="widget-header">
+          <span class="circles-logo">C</span>
+          Send Kudos
+        </div>
+        <iframe
+          id="circles-frame"
+          src="https://circles.gnosis.io/pilots/kudos-ga?group=dandelion&address=0xf48554937f18885c7f15c432c596b5843648231D"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+    </div><!-- /sidebar -->
+  </div><!-- /page-content -->
 
   <script>
-    function loadFrame() {
-      var url = document.getElementById('url-input').value.trim();
-      if (!url) return;
-      if (!/^https?:\/\//i.test(url)) {
-        url = 'https://' + url;
-        document.getElementById('url-input').value = url;
-      }
-      document.getElementById('demo-frame').src = url;
+    function changeQty(btn, delta) {
+      var valEl = btn.parentElement.querySelector('.qty-val');
+      var val = parseInt(valEl.textContent) + delta;
+      if (val < 0) val = 0;
+      valEl.textContent = val;
     }
 
-    document.getElementById('url-input').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') loadFrame();
-    });
-
-    loadFrame();
+    function selectDonation(el) {
+      document.querySelectorAll('.donation-option').forEach(function(o) {
+        o.classList.remove('selected');
+      });
+      el.classList.add('selected');
+    }
   </script>
 </body>
 </html>
