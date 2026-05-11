@@ -587,9 +587,9 @@
     </div><!-- /sidebar -->
   </div><!-- /page-content -->
 
-  <script type="module">
-    import iframeResize from 'https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5/+esm';
-    iframeResize({ license: 'GPLv3', waitForLoad: true }, '#circles-frame');
+  <script src="https://cdn.jsdelivr.net/npm/iframe-resizer@4.2.10/js/iframeResizer.min.js"></script>
+  <script>
+    iFrameResize({ waitForLoad: true, checkOrigin: false }, '#circles-frame');
   </script>
 
   <script>
